@@ -2,8 +2,19 @@
 
 Collaboration with Finlay Lab
 
-### Pipeline
+### Installation
 
+testing on Stefanie's macbook:
+	check python
+	clone git repository
+	copy scythe to path
+	download usearch - https://www.drive5.com/usearch/download.html
+	install biopython
+
+scythe binary compiled for mac included
+if it doesn't work, may need to recompile from https://github.com/vsbuffalo/scythe
+
+### Pipeline
 ProcessReads.py takes two arguments: the directory of raw reads and an output directory to store files.
 
 ### Naming
