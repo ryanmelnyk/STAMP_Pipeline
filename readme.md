@@ -4,6 +4,8 @@ Collaboration with Finlay Lab
 
 ### Installation
 
+test Hello!
+
 testing on Stefanie's macbook:
 	check python
 	clone git repository
