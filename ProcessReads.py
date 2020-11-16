@@ -10,7 +10,8 @@ import subprocess
 
 def parse_args():
     parser = argparse.ArgumentParser(description='''
-Pipeline for parsing STAMP sequencing data. Provide path to the sequencing directory as a single argument.
+Pipeline for parsing STAMP sequencing data. Provide path to the sequencing
+directory as a single argument.
     ''')
     parser.add_argument('seqdata', type=str,
                         help='path to the sequencing data')
@@ -92,14 +93,20 @@ def get_stats(outdir):
     o.write("sample\traw_reads\texact\n")
     for f in os.listdir(os.path.join(outdir, "raw")):
         count = 0
-        for seq in SeqIO.parse(open(os.path.join(outdir, "raw", f), 'r'), 'fastq'):
+        for seq in SeqIO.parse(open(os.path.join(outdir, "raw", f),
+                               'r'), 'fastq'):
             count += 1
         stats[f.split(".")[0]] = {"raw": count}
         exact_count = 0
-        for seq in SeqIO.parse(open(os.path.join(outdir, "exact", f.split(".")[0]+".exact.fq"),'r'),'fastq'):
+        for seq in SeqIO.parse(open(os.path.join(outdir,
+                                                 "exact",
+                                                 f.split(".")[0] +
+                                                 ".exact.fq"), 'r'), 'fastq'):
             exact_count += 1
         stats[f.split(".")[0]]["exact"] = exact_count
-        o.write("{}\t{}\t{}\n".format(f.split(".")[0], str(count), str(exact_count)))
+        o.write("{}\t{}\t{}\n".format(f.split(".")[0],
+                                      str(count),
+                                      str(exact_count)))
     o.close()
     return
 
@@ -107,7 +114,9 @@ def get_stats(outdir):
 def make_unique_fasta(f, outdir):
     o = open(os.path.join(outdir, "unique", f.split(".")[0]+".unique.fa"), 'w')
     barcodes = {}
-    for line in open(os.path.join(outdir, "barcodes", f.split(".")[0]+".barcodes.txt"), 'r'):
+    for line in open(os.path.join(outdir,
+                                  "barcodes",
+                                  f.split(".")[0]+".barcodes.txt"), 'r'):
         seq = line.rstrip().split("\t")[0]
         o.write(">{}\n".format(seq))
         o.write("{}\n".format(seq))
@@ -117,8 +126,15 @@ def make_unique_fasta(f, outdir):
 
 
 def uclust(f, outdir):
-    cmds = "vsearch --cluster_fast {} --minseqlength 30 --uc {} --id 0.8".format(os.path.join(outdir, "unique", f.split(".")[0]+".unique.fa"), os.path.join(outdir,"uc",f.split(".")[0]+".uc"))
-    proc = subprocess.Popen(cmds.split())
+    cmds = "vsearch --cluster_fast {} --minseqlength 30 --uc {} --id 0.8"
+
+    proc = subprocess.Popen(
+        cmds.format(os.path.join(outdir,
+                                 "unique",
+                                 f.split(".")[0]+".unique.fa"),
+                    os.path.join(outdir,
+                                 "uc",
+                                 f.split(".")[0]+".uc")).split())
     proc.wait()
     return
 
@@ -135,7 +151,8 @@ def parse_uclust(f, outdir, barcodes):
             clusters[vals[9]].append(vals[8])
         else:
             pass
-    o = open(os.path.join(outdir, "clusters", f.split(".")[0]+".clusters.txt"), 'w')
+    o = open(os.path.join(outdir, "clusters", f.split(".")[0]+".clusters.txt"),
+             'w')
     for c in clusters:
         match_count = 0
         for match in clusters[c]:
