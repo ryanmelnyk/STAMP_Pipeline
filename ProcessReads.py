@@ -45,12 +45,21 @@ def filter_by_length(f, outdir):
 
 
 def trim_tn(f, outdir):
-    cmds = "scythe -a {} {}.filtered.fq -o {}.trimmed.fq -q sanger".format(
-        os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])),
-                     "conserved_region.fna"),
-        os.path.join(outdir, "filtered", f.split(".")[0]),
-        os.path.join(outdir, "trimmed", f.split(".")[0]))
-    proc = subprocess.Popen(cmds.split())
+    cmds = ["scythe",
+            "-a",
+            os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])),
+                         "conserved_region.fna"),
+            "-M", "5",
+            "{}.filtered.fq".format(os.path.join(outdir,
+                                                 "filtered",
+                                                 f.split(".")[0])),
+            "-o",
+            "{}.trimmed.fq".format(os.path.join(outdir,
+                                                "trimmed",
+                                                f.split(".")[0])),
+            "-q",
+            "sanger"]
+    proc = subprocess.Popen(cmds)
     proc.wait()
     return
 
